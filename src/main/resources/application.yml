@@ -1,0 +1,56 @@
+spring:
+  application:
+    name: inspect-pro
+
+  # Database Configuration
+  datasource:
+    url: jdbc:postgresql://localhost:5432/inspectpro
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+  
+  # JPA / Hibernate Configuration
+  jpa:
+    hibernate:
+      ddl-auto: validate  # Flyway maneja las migraciones, no Hibernate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  
+  # Flyway Configuration
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    locations: classpath:db/migration
+  
+  # Redis Configuration
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 60000
+
+  # Error Configuration
+  web:
+    error:
+      include-message: always
+      include-binding-errors: always
+
+# JWT Configuration
+jwt:
+  secret: your-secret-key-change-this-in-production-at-least-256-bits-long
+  access-token-expiration: 900000      # 15 minutos en milisegundos
+  refresh-token-expiration: 604800000  # 7 días en milisegundos
+
+# Server Configuration
+server:
+  port: 8080
+
+# Logging Configuration
+logging:
+  level:
+    com.inspectpro: DEBUG
+    org.springframework.security: DEBUG
+    org.hibernate.SQL: DEBUG
