@@ -1,8 +1,17 @@
 package com._9.inspect_pro.repository;
 
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import com._9.inspect_pro.model.User;
+
 @Repository
-public class UserRepository {
-    
+public interface UserRepository extends JpaRepository<User, Long> {
+
+    Optional<User> findByEmail(String email);
+
+    boolean existsByEmail(String email);
+
 }

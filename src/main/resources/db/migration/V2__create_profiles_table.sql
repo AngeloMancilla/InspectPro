@@ -1,0 +1,10 @@
+CREATE TABLE profiles (
+    id BIGSERIAL PRIMARY KEY,
+    user_id BIGINT NOT NULL REFERENCES users(id),
+    display_name VARCHAR(100) NOT NULL,
+    type VARCHAR(50) NOT NULL DEFAULT 'BASIC',
+    created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_profile_user_id ON profiles(user_id);
