@@ -26,9 +26,9 @@
       port: 6379
 
 jwt:
-  secret: your-secret-key-change-this-in-production-min-256-bits
-  access-token-expiration: 3600000
-  refresh-token-expiration: 604800000
+  secret: 351aaec7b3f7fdaca4667f57987670f93800d14cf66c3cbf43845e0ac94bef6a
+  access-token-expiration: 900000 # 15 min
+  refresh-token-expiration: 604800000 # 7 días
 
 logging:
   level:
