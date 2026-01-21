@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public User registerUser(String email, String password, String name) {
         if (userRepository.existsByEmail(email)) {
-            throw new IllegalArgumentException("Email ya está registrado");
+            throw new IllegalArgumentException("Email already registered");
         }
 
         String passwordHash = passwordEncoder.encode(password);
@@ -50,10 +50,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public User authenticateUser(String email, String password) {
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException("Credenciales inválidas"));
+                .orElseThrow(() -> new IllegalArgumentException("Invalid credentials"));
 
         if (!passwordEncoder.matches(password, user.getPasswordHash())) {
-            throw new IllegalArgumentException("Credenciales inválidas");
+            throw new IllegalArgumentException("Invalid credentials");
         }
 
         return user;
