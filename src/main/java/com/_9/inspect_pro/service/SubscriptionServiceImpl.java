@@ -33,7 +33,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Transactional
     public Subscription renewSubscription(Long id, LocalDate newEndDate) {
         Subscription subscription = subscriptionRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Suscripción no encontrada"));
+            .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
 
         subscription.setEndDate(newEndDate);
         return subscriptionRepository.save(subscription);
@@ -43,10 +43,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Transactional
     public Subscription upgradeTier(Long id, SubscriptionTier newTier) {
         Subscription subscription = subscriptionRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Suscripción no encontrada"));
+            .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
 
         if (subscription.getTier().ordinal() >= newTier.ordinal()) {
-            throw new IllegalArgumentException("El nuevo tier debe ser superior al actual");
+            throw new IllegalArgumentException("New tier must be higher than current tier");
         }
 
         subscription.setTier(newTier);
@@ -57,10 +57,10 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Transactional
     public Subscription downgradeTier(Long id, SubscriptionTier newTier) {
         Subscription subscription = subscriptionRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Suscripción no encontrada"));
+            .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
 
         if (subscription.getTier().ordinal() <= newTier.ordinal()) {
-            throw new IllegalArgumentException("El nuevo tier debe ser inferior al actual");
+            throw new IllegalArgumentException("New tier must be lower than current tier");
         }
 
         subscription.setTier(newTier);
@@ -71,7 +71,7 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Transactional
     public void cancelSubscription(Long id) {
         Subscription subscription = subscriptionRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Suscripción no encontrada"));
+            .orElseThrow(() -> new IllegalArgumentException("Subscription not found"));
 
         subscription.setEndDate(LocalDate.now());
         subscriptionRepository.save(subscription);

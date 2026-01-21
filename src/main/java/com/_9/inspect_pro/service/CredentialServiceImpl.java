@@ -40,7 +40,7 @@ public class CredentialServiceImpl implements CredentialService {
                 .orElseThrow(() -> new IllegalArgumentException("Credencial no encontrada"));
 
         if (credential.getStatus() != CredentialStatus.PENDING) {
-            throw new IllegalStateException("Solo se pueden aprobar credenciales PENDING");
+            throw new IllegalStateException("Only PENDING credentials can be approved");
         }
 
         credential.setStatus(CredentialStatus.APPROVED);
@@ -54,7 +54,7 @@ public class CredentialServiceImpl implements CredentialService {
                 .orElseThrow(() -> new IllegalArgumentException("Credencial no encontrada"));
 
         if (credential.getStatus() != CredentialStatus.PENDING) {
-            throw new IllegalStateException("Solo se pueden rechazar credenciales PENDING");
+            throw new IllegalStateException("Only PENDING credentials can be rejected");
         }
 
         credential.setStatus(CredentialStatus.REJECTED);
@@ -97,8 +97,7 @@ public class CredentialServiceImpl implements CredentialService {
     @Transactional
     public Credential updateCredential(Long id, String issuer, String licenseNumber, LocalDate expiryDate) {
         Credential credential = credentialRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Credencial no encontrada"));
-
+            .orElseThrow(() -> new IllegalArgumentException("Credential not found"));
         credential.setIssuer(issuer);
         credential.setLicenseNumber(licenseNumber);
         credential.setExpiryDate(expiryDate);
@@ -117,7 +116,7 @@ public class CredentialServiceImpl implements CredentialService {
                 .orElseThrow(() -> new IllegalArgumentException("Credencial no encontrada"));
 
         if (credential.getStatus() == CredentialStatus.APPROVED) {
-            throw new IllegalStateException("No se pueden eliminar credenciales aprobadas");
+            throw new IllegalStateException("Cannot delete approved credentials");
         }
 
         credentialRepository.deleteById(credentialId);
