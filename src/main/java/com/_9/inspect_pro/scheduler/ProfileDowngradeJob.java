@@ -37,10 +37,16 @@ public class ProfileDowngradeJob {
             Long activeCredentials = credentialRepository
                     .countByProfileIdAndStatus(profile.getId(), CredentialStatus.APPROVED);
             
-            if (activeCredentials == 0) {
+            Long pendingCredentials = credentialRepository
+                    .countByProfileIdAndStatus(profile.getId(), CredentialStatus.PENDING);
+            
+            if (activeCredentials == 0 && pendingCredentials == 0) {
                 profileService.downgradeToBasic(profile.getId());
                 downgradeCount++;
-                log.debug("Downgraded profile {} (no active credentials)", profile.getId());
+                log.debug("Downgraded profile {} (no active or pending credentials)", profile.getId());
+            } else if (activeCredentials == 0 && pendingCredentials > 0) {
+                log.debug("Profile {} kept VP status (grace period: {} pending credentials)", 
+                        profile.getId(), pendingCredentials);
             }
         }
         
