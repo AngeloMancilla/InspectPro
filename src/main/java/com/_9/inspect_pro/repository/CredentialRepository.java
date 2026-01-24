@@ -26,4 +26,6 @@ public interface CredentialRepository extends JpaRepository<Credential, Long> {
             @Param("endDate") LocalDate enDate);
 
     Long countByProfileIdAndStatus(Long profileId, CredentialStatus status);
+    
+    List<Credential> findByStatusAndExpiresAtBefore(CredentialStatus status, LocalDate date);
 }
