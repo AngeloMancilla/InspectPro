@@ -26,7 +26,7 @@ public class CredentialExpirationJob {
         
         LocalDate today = LocalDate.now();
         List<Credential> expiredCredentials = credentialRepository
-                .findByStatusAndExpiresAtBefore(CredentialStatus.APPROVED, today);
+                .findByStatusAndExpiryDateBefore(CredentialStatus.APPROVED, today);
         
         if (expiredCredentials.isEmpty()) {
             log.info("No credentials to expire");

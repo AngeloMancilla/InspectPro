@@ -27,5 +27,5 @@ public interface CredentialRepository extends JpaRepository<Credential, Long> {
 
     Long countByProfileIdAndStatus(Long profileId, CredentialStatus status);
     
-    List<Credential> findByStatusAndExpiresAtBefore(CredentialStatus status, LocalDate date);
+    List<Credential> findByStatusAndExpiryDateBefore(CredentialStatus status, LocalDate date);
 }
