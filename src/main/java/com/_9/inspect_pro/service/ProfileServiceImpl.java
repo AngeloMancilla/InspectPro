@@ -1,6 +1,5 @@
 package com._9.inspect_pro.service;
 
-import com._9.inspect_pro.model.Credential;
 import com._9.inspect_pro.model.CredentialStatus;
 import com._9.inspect_pro.model.Profile;
 import com._9.inspect_pro.model.ProfileType;
