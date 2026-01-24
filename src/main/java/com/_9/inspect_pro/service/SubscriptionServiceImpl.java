@@ -2,7 +2,9 @@ package com._9.inspect_pro.service;
 
 import com._9.inspect_pro.model.Subscription;
 import com._9.inspect_pro.model.SubscriptionTier;
+import com._9.inspect_pro.model.User;
 import com._9.inspect_pro.repository.SubscriptionRepository;
+import com._9.inspect_pro.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,15 +16,21 @@ import java.util.Optional;
 public class SubscriptionServiceImpl implements SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
+    private final UserRepository userRepository;
 
-    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository) {
+    public SubscriptionServiceImpl(SubscriptionRepository subscriptionRepository, UserRepository userRepository) {
         this.subscriptionRepository = subscriptionRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
     public Subscription createSubscription(Long userId, SubscriptionTier tier, LocalDate startDate, LocalDate endDate) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            
         Subscription subscription = new Subscription();
+        subscription.setUser(user);
         subscription.setTier(tier);
         subscription.setStartDate(startDate);
         subscription.setEndDate(endDate);

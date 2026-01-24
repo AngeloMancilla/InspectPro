@@ -42,7 +42,10 @@ public class UserServiceImpl implements UserService {
         profile.setUser(user);
         profile.setDisplayName(name);
         profile.setType(ProfileType.BASIC);
-        profileRepository.save(profile);
+        profile = profileRepository.save(profile);
+        
+        // Agregar el profile manualmente a la lista del usuario
+        user.getProfiles().add(profile);
 
         return user;
     }

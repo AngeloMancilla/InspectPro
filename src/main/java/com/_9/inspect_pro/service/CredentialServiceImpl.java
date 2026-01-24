@@ -3,7 +3,9 @@ package com._9.inspect_pro.service;
 import com._9.inspect_pro.model.Credential;
 import com._9.inspect_pro.model.CredentialStatus;
 import com._9.inspect_pro.model.CredentialType;
+import com._9.inspect_pro.model.Profile;
 import com._9.inspect_pro.repository.CredentialRepository;
+import com._9.inspect_pro.repository.ProfileRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,16 +17,22 @@ import java.util.Optional;
 public class CredentialServiceImpl implements CredentialService {
 
     private final CredentialRepository credentialRepository;
+    private final ProfileRepository profileRepository;
 
-    public CredentialServiceImpl(CredentialRepository credentialRepository) {
+    public CredentialServiceImpl(CredentialRepository credentialRepository, ProfileRepository profileRepository) {
         this.credentialRepository = credentialRepository;
+        this.profileRepository = profileRepository;
     }
 
     @Override
     @Transactional
     public Credential createCredential(Long profileId, CredentialType type, String issuer, String licenseNumber,
             LocalDate expiryDate) {
+        Profile profile = profileRepository.findById(profileId)
+            .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
+            
         Credential credential = new Credential();
+        credential.setProfile(profile);
         credential.setType(type);
         credential.setStatus(CredentialStatus.PENDING);
         credential.setIssuer(issuer);
