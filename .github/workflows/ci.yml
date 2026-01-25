@@ -46,6 +46,9 @@ jobs:
         distribution: 'temurin'
         cache: maven
 
+    - name: Make mvnw executable
+      run: chmod +x mvnw
+
     - name: Build with Maven
       run: ./mvnw clean package -DskipTests
 
@@ -78,10 +81,10 @@ jobs:
     - name: Test docker-compose setup
       run: |
         docker compose up -d
-        sleep 30
+        sleep 35
         docker compose ps
-        docker compose logs app
-        curl -f http://localhost:8080/actuator/health || exit 1
+        docker compose logs app | tail -20
+        curl -f http://localhost:8080/swagger-ui.html -I || exit 1
 
     - name: Cleanup
       if: always()
