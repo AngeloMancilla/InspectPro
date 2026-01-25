@@ -116,18 +116,25 @@ See [DECISIONS.md](src/main/resources/docs/DECISIONS.md) for:
 # Start only PostgreSQL and Redis
 docker compose up -d postgres redis
 
+# Copy environment template
+cp .env.example .env
+
 # Run Spring Boot locally
 ./mvnw spring-boot:run
 ```
 
 ### Environment Variables
 
+See [`.env.example`](.env.example) for all configuration options.
+
+**Key variables:**
 ```bash
 SPRING_DATASOURCE_URL=jdbc:postgresql://localhost:5433/inspectpro
 SPRING_DATASOURCE_USERNAME=postgres
 SPRING_DATASOURCE_PASSWORD=postgres
 SPRING_DATA_REDIS_HOST=localhost
 SPRING_DATA_REDIS_PORT=6379
+JWT_SECRET=your-256-bit-secret-key-change-this-in-production
 ```
 
 ## Database Schema

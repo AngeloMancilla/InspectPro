@@ -69,3 +69,19 @@ if (active == 0 && pending == 0) {
 - Public endpoints: Only `/api/v1/auth/**`
 
 ---
+
+## Implementation Notes
+
+### Foreign Key Pattern
+
+All create methods follow same pattern: fetch parent entity first, then set relationship before save. Fixed null FK errors in SubscriptionService, ProfileService, and CredentialService.
+
+### Lombok + JPA Gotcha
+
+`@Builder.Default` doesn't work with JPA's no-args constructor. Had to write custom constructor to initialize ArrayList fields, otherwise got NPE when adding items.
+
+### Scheduler
+
+Credential expiration job runs daily at midnight. Fixed method name typo: `expiresAt` → `expiryDate` to match entity property. In production would need distributed lock for multi-instance.
+
+---
