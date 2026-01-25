@@ -29,7 +29,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class User {
@@ -51,6 +50,12 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     @Builder.Default
     private List<Subscription> subscriptions = new ArrayList<>();
+    
+    // Constructor sin argumentos que inicializa las listas
+    public User() {
+        this.profiles = new ArrayList<>();
+        this.subscriptions = new ArrayList<>();
+    }
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)

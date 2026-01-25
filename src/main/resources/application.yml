@@ -3,9 +3,9 @@
     name: inspect-pro
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/inspectpro
-    username: postgres
-    password: postgres
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5433/inspectpro}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver
 
   jpa:
@@ -22,13 +22,15 @@
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${SPRING_DATA_REDIS_HOST:localhost}
+      port: ${SPRING_DATA_REDIS_PORT:6379}
+      repositories:
+        enabled: false
 
 jwt:
   secret: 351aaec7b3f7fdaca4667f57987670f93800d14cf66c3cbf43845e0ac94bef6a
-  access-token-expiration: 900000 # 15 min
-  refresh-token-expiration: 604800000 # 7 días
+  expiration: 900000 # 15 min
+  refresh-expiration: 604800000 # 7 días
 
 logging:
   level:

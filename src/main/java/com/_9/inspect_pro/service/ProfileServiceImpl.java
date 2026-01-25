@@ -1,11 +1,12 @@
 package com._9.inspect_pro.service;
 
-import com._9.inspect_pro.model.Credential;
 import com._9.inspect_pro.model.CredentialStatus;
 import com._9.inspect_pro.model.Profile;
 import com._9.inspect_pro.model.ProfileType;
+import com._9.inspect_pro.model.User;
 import com._9.inspect_pro.repository.CredentialRepository;
 import com._9.inspect_pro.repository.ProfileRepository;
+import com._9.inspect_pro.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,17 +18,24 @@ public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
     private final CredentialRepository credentialRepository;
+    private final UserRepository userRepository;
 
     public ProfileServiceImpl(ProfileRepository profileRepository,
-                              CredentialRepository credentialRepository) {
+                              CredentialRepository credentialRepository,
+                              UserRepository userRepository) {
         this.profileRepository = profileRepository;
         this.credentialRepository = credentialRepository;
+        this.userRepository = userRepository;
     }
 
     @Override
     @Transactional
     public Profile createProfile(Long userId, String displayName, ProfileType type) {
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new IllegalArgumentException("User not found"));
+            
         Profile profile = new Profile();
+        profile.setUser(user);
         profile.setDisplayName(displayName);
         profile.setType(type);
         return profileRepository.save(profile);
@@ -40,7 +48,7 @@ public class ProfileServiceImpl implements ProfileService {
             .orElseThrow(() -> new IllegalArgumentException("Perfil no encontrado"));
 
         if (!isEligibleForVerifiedProfessional(profileId)) {
-            throw new IllegalStateException("Perfil no cumple requisitos para VP (necesita ≥1 credencial aprobada)");
+            throw new IllegalStateException("Profile does not meet VP requirements (needs ≥2 approved credentials)");
         }
 
         profile.setType(ProfileType.VERIFIED_PROFESSIONAL);
@@ -63,7 +71,7 @@ public class ProfileServiceImpl implements ProfileService {
             profileId, 
             CredentialStatus.APPROVED
         );
-        return activeCredentials >= 1;
+        return activeCredentials >= 2;
     }
 
     @Override
@@ -80,7 +88,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public Profile updateProfile(Long id, String displayName) {
         Profile profile = profileRepository.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("Perfil no encontrado"));
+            .orElseThrow(() -> new IllegalArgumentException("Profile not found"));
         
         profile.setDisplayName(displayName);
         return profileRepository.save(profile);
@@ -90,7 +98,7 @@ public class ProfileServiceImpl implements ProfileService {
     @Transactional
     public void deleteProfile(Long profileId) {
         if (!profileRepository.existsById(profileId)) {
-            throw new IllegalArgumentException("Perfil no encontrado");
+            throw new IllegalArgumentException("Profile not found");
         }
         profileRepository.deleteById(profileId);
     }

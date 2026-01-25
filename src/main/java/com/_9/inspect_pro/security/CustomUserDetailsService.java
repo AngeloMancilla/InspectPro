@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,12 +19,13 @@ import com._9.inspect_pro.repository.UserRepository;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
-    UserRepository userRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new UsernameNotFoundException("Usuario no encontrado: " + email));
+        User user = userRepository.findByEmailWithProfiles(email)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found: " + email));
 
         Collection<GrantedAuthority> authorities = getAuthorities(user);
 
